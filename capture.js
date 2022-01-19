@@ -32,20 +32,8 @@ ui.layout(
     </scroll>
 );
 
-
-
-
 var search_goal = ""
-const targetUrl="http://192.168.0.104:3000";
-var 本地存储 = storages.create("qwqiweu121")
-// var speak_1 = 本地存储.get("speak_1")
-// if (speak_1) {
-//     ui.spk1.setText(speak_1)
-//     speak_1 = ui.spk1.text()
-// } else {
-//     speak_1 = ui.spk1.text()
-// }
-
+const targetUrl="http://192.168.0.102:3000";
 
 //无障碍跳转
 ui.autoService.on("check", function (checked) {
@@ -59,7 +47,6 @@ ui.autoService.on("check", function (checked) {
         auto.service.disableSelf();
     }
 });
-
 
 //悬浮窗跳转
 ui.overlayService.on("check", function (checked) {
@@ -82,8 +69,6 @@ ui.overlayService.on("check", function (checked) {
         toast("已关闭悬浮窗权限");
     }
 });
-
-
 
 threads.start(function () {
     //在新线程执行的代码
@@ -114,11 +99,6 @@ ui.bt.click(function () {
     }
 })
 
-
-
-
-
-
 function 主程序2(){
     console.show()
     app.launchPackage("com.shizhuang.duapp")
@@ -142,8 +122,6 @@ function 主程序2(){
       search_word()
       check_msg()
       toast(search_goal +"处理完毕")
-      back_toserch()
-        
     }
 }
 
@@ -155,19 +133,23 @@ function search_word(){
     Click(ch)
     setText(search_goal)
     console.log(search_goal);
-    sleep(500)
+    sleep(1000)
     click(1050, 2180)
     // log(device.width,device.height)
 }
 
 
-function back_toserch(){
-    var cl = id("closeIcon").findOne()
-    console.log("开始返回");
-    Click(cl)
-    var bk = id('homeAsUpBtn').findOne()
-    console.log("返回搜索");
-    Click(bk)
+function back_toserch(notFound){
+    //如果找到了，则会进入页面，需要多重返回
+    if(!notFound){
+        var cl = id("closeIcon").findOne()
+        console.log("开始返回");
+        Click(cl)
+        var bk = id('homeAsUpBtn').findOne()
+        console.log("返回搜索");
+        Click(bk)
+    }
+   
     var it  = id("searchTextView").findOne()
     Click(it)
 
@@ -176,14 +158,22 @@ function back_toserch(){
 
 
 function check_msg() {
-    var shop = id("itemTitle").findOne()
-    Click(shop)
-    id("shareButton").findOne()
-    console.log("到达分享页面");
-    var bu = id("buyButton").clickable(true).findOne()
-    Click(bu)
-    console.log("点击购买");
-    // id("tvPrice").textContains("¥").findOne()
+    
+    var notFound = id("layRecommendTipView").findOne(300);
+    if(notFound){
+        var it  = id("searchTextView").findOne()
+        Click(it)
+        return;
+    }else{
+        var shop = id("itemTitle").findOne()
+        console.log(shop)
+        Click(shop)
+        id("shareButton").findOne()
+        console.log("到达分享页面");
+        var bu = id("buyButton").clickable(true).findOne()
+        Click(bu)
+        console.log("点击购买");
+    }
     console.log("等待0.5s，开始截图");
     console.hide()
 
@@ -195,8 +185,7 @@ function check_msg() {
       });
     console.show()
     console.warn("截图完毕");
-
-
+    back_toserch(notFound)
 }
 
 

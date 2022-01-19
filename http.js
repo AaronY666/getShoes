@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const port = 3000;
-const host = '192.168.0.104';
+const host = '192.168.0.102';
 const fs = require('fs');
 const { getInfoListByCountry } = require('./utils');
 const memoryJson = require('./data/memory.json'); // 图片缓存

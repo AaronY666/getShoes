@@ -41,7 +41,11 @@ function getCountryData(countryItem, data) {
           url,
           pid,
           price: { fullPrice, currentPrice, currency },
+          isExcluded,
         } = item;
+        if (isExcluded) {
+          return;
+        }
         data.push(
           {
             pid,
@@ -133,6 +137,3 @@ module.exports = {
   getCountryData,
   getInfoListByCountry,
 };
-
-
-
